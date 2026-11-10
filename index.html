@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Misi Jelajah Nusantara - Galeri Budaya</title>
+    <title>Misi Jelajah Nusantara - Galeri Budaya 38 Provinsi</title>
     <style>
         :root {
             --primary: #2c3e50;
@@ -15,11 +15,12 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
             margin: 0;
-            padding: 0;
+            padding: 20px;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
+            min-height: 100vh;
+            box-sizing: border-box;
         }
         .container {
             width: 100%;
@@ -33,6 +34,7 @@
         h1 {
             color: var(--primary);
             margin-bottom: 5px;
+            font-size: 24px;
         }
         .subtitle {
             color: #7f8c8d;
@@ -43,10 +45,14 @@
             background: #f1f2f6;
             padding: 20px;
             border-radius: 10px;
-            font-size: 18px;
+            font-size: 16px;
             font-weight: bold;
             color: #2f3640;
             margin-bottom: 20px;
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         .options-grid {
             display: grid;
@@ -54,12 +60,17 @@
             gap: 12px;
             margin-bottom: 20px;
         }
+        @media (max-width: 480px) {
+            .options-grid {
+                grid-template-columns: 1fr;
+            }
+        }
         .btn-option {
             background: white;
             border: 2px solid #dcdde1;
-            padding: 15px;
+            padding: 12px;
             border-radius: 8px;
-            font-size: 15px;
+            font-size: 14px;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.2s ease;
@@ -106,17 +117,17 @@
 <body>
 
     <div class="container">
-        <!-- Halaman Utama / Menu -->
+        <!-- Halaman Utama -->
         <div id="home-screen">
             <h1>🌏 Misi Jelajah Nusantara</h1>
-            <p class="subtitle">Kenal Budaya, Cinta Nusantara[span_0](start_span)[span_0](end_span)</p>
-            <p style="margin-bottom: 30px; color: #555;">Uji pengetahuanmu seputar pakaian adat, makanan, tarian, dan alat musik dari berbagai daerah di Indonesia!</p>
+            <p class="subtitle">Kenal Budaya 38 Provinsi Indonesia</p>
+            <p style="margin-bottom: 30px; color: #555; font-size: 14px;">Uji pengetahuanmu seputar pakaian adat, makanan khas, tarian, dan alat musik tradisional dari seluruh provinsi di Indonesia! Soal akan diacak setiap kali kamu bermain.</p>
             <button class="btn-start" onclick="startGame()">Mulai Misi Sekarang</button>
         </div>
 
-        <!-- Halaman Game / Kuis -->
+        <!-- Halaman Game -->
         <div id="game-screen" class="hidden">
-            <div id="progress" style="font-size: 13px; color: #7f8c8d; margin-bottom: 10px;">Pertanyaan 1 dari 5</div>
+            <div id="progress" style="font-size: 13px; color: #7f8c8d; margin-bottom: 10px;">Pertanyaan 1 dari 38</div>
             <div class="question-box" id="question-text">Memuat pertanyaan...</div>
             
             <div class="options-grid">
@@ -134,40 +145,54 @@
         <div id="end-screen" class="hidden">
             <h2>🎉 Misi Selesai!</h2>
             <p style="margin: 20px 0; font-size: 18px;">Skor Akhir Kamu: <strong id="final-score" style="color: var(--accent);">0</strong></p>
-            <p style="color: #666; font-size: 14px; margin-bottom: 25px;">Terima kasih sudah ikut melestarikan dan mengenal budaya Indonesia melalui teknologi!</p>
-            <button class="btn-start" onclick="resetGame()">Main Lagi</button>
+            <p style="color: #666; font-size: 14px; margin-bottom: 25px;">Terima kasih telah berkontribusi melestarikan budaya Nusantara melalui teknologi!</p>
+            <button class="btn-start" onclick="startGame()">Main Lagi (Soal Diacak)</button>
         </div>
     </div>
 
     <script>
-        const quizData = [
-            {
-                question: "Dari provinsi manakah asal alat musik tradisional 'Sasando' yang terbuat dari daun lontar?",
-                options: ["Bali", "Nusa Tenggara Timur (NTT)", "Maluku", "Papua"],
-                answer: 1
-            },
-            {
-                question: "Makanan khas tradisional 'Rendang' berasal dari daerah...",
-                options: ["Sumatera Barat", "Jawa Tengah", "Sulawesi Selatan", "Sumatera Utara"],
-                answer: 0
-            },
-            {
-                question: "Tari Tradisional 'Saman' yang terkenal dengan gerakan cepat dan serentak berasal dari...",
-                options: ["Aceh", "Riau", "Kalimantan Timur", "Jawa Barat"],
-                answer: 0
-            },
-            {
-                question: "Pakaian adat 'Ulos' merupakan identitas kebudayaan tradisional dari provinsi...",
-                options: ["Sumatera Utara", "Jambi", "Bengkulu", "Lampung"],
-                answer: 0
-            },
-            {
-                question: "Alat musik tradisional 'Angklung' yang terbuat dari bambu berasal dari...",
-                options: ["DKI Jakarta", "Jawa Barat", "DI Yogyakarta", "Jawa Timur"],
-                answer: 1
-            }
+        const rawQuizData = [
+            { question: "Pakaian adat 'Ulee Balang' dan tari 'Saman' berasal dari provinsi...", options: ["Aceh", "Sumatera Utara", "Riau", "Sumatera Barat"], answer: 0 },
+            { question: "Pakaian adat 'Ulos' dan makanan khas 'Naniura' berasal dari provinsi...", options: ["Sumatera Utara", "Aceh", "Jambi", "Sumatera Selatan"], answer: 0 },
+            { question: "Makanan khas 'Rendang' dan tari 'Piring' berasal dari provinsi...", options: ["Sumatera Barat", "Riau", "Jambi", "Bengkulu"], answer: 0 },
+            { question: "Pakaian adat 'Teluk Belanga' dan tari 'Zapin' merupakan kebudayaan dari...", options: ["Riau", "Sumatera Barat", "Bangka Belitung", "Lampung"], answer: 0 },
+            { question: "Tari 'Gubang' dan pakaian adat khas Kepulauan Riau bernama...", options: ["Kebaya Laboh", "Baju Bodo", "King Baba", "Ulee Balang"], answer: 0 },
+            { question: "Candi Muaro Jambi dan makanan tradisional 'Tempoyak' khas berasal dari provinsi...", options: ["Jambi", "Sumatera Selatan", "Bengkulu", "Riau"], answer: 0 },
+            { question: "Makanan tradisional 'Pempek' dan pakaian adat 'Aesan Gede' berasal dari...", options: ["Sumatera Selatan", "Lampung", "Bengkulu", "Jambi"], answer: 0 },
+            { question: "Alat musik petik 'Doli-Doli' dan tari 'Tebet' berasal dari provinsi...", options: ["Bengkulu", "Lampung", "Sumatera Selatan", "Jambi"], answer: 0 },
+            { question: "Pakaian adat 'Pangsi' khas Serang dan tari 'Cokek' berasal dari provinsi...", options: ["Banten", "DKI Jakarta", "Jawa Barat", "Jawa Tengah"], answer: 0 },
+            { question: "Makanan khas 'Mie Bangka' dan pakaian adat 'Paksian' berasal dari...", options: ["Bangka Belitung", "Kepulauan Riau", "Lampung", "Riau"], answer: 0 },
+            { question: "Tari 'Melinting' dan rumah adat 'Nuwou Sesat' berasal dari provinsi...", options: ["Lampung", "Bengkulu", "Sumatera Selatan", "Banten"], answer: 0 },
+            { question: "Pakaian adat 'Pangsi Betawi' dan kuliner 'Kerak Telor' berasal dari...", options: ["DKI Jakarta", "Banten", "Jawa Barat", "Jawa Tengah"], answer: 0 },
+            { question: "Alat musik 'Angklung' dan tarian 'Jaipong' berasal dari provinsi...", options: ["Jawa Barat", "DKI Jakarta", "Jawa Tengah", "DI Yogyakarta"], answer: 0 },
+            { question: "Alat musik 'Gamelan' dan kuliner 'Nasi Liwet Solo' khas dari provinsi...", options: ["Jawa Tengah", "Jawa Timur", "DI Yogyakarta", "Jawa Barat"], answer: 0 },
+            { question: "Makanan khas 'Gudeg' dan pakaian adat 'Surjan' identik dengan provinsi...", options: ["DI Yogyakarta", "Jawa Tengah", "Jawa Timur", "Bali"], answer: 0 },
+            { question: "Kesenian 'Reog Ponorogo' dan kuliner 'Rujak Cingur' berasal dari...", options: ["Jawa Timur", "Jawa Tengah", "Bali", "NTB"], answer: 0 },
+            { question: "Tari 'Pendet' dan alat musik 'Ceng-Ceng' berasal dari pulau/provinsi...", options: ["Bali", "NTB", "NTT", "Jawa Timur"], answer: 0 },
+            { question: "Tari 'Gandrung' dan pakaian adat 'Pegangaan' berasal dari Nusa Tenggara Barat (NTB), serta makanan khasnya adalah...", options: ["Ayam Taliwang", "Rendang", "Gudeg", "Papeda"], answer: 0 },
+            { question: "Alat musik 'Sasando' yang terbuat dari daun lontar berasal dari...", options: ["Nusa Tenggara Timur (NTT)", "NTB", "Maluku", "Papua"], answer: 0 },
+            { question: "Pakaian adat 'King Baba' dan tari 'Monong' berasal dari kebudayaan...", options: ["Kalimantan Barat", "Kalimantan Tengah", "Kalimantan Selatan", "Kalimantan Timur"], answer: 0 },
+            { question: "Tari 'Giring-Giring' dan makanan khas 'Jemuah' berasal dari provinsi...", options: ["Kalimantan Tengah", "Kalimantan Barat", "Kalimantan Selatan", "Kalimantan Utara"], answer: 0 },
+            { question: "Kain tradisional 'Sasirangan' dan kuliner 'Soto Banjar' khas dari provinsi...", options: ["Kalimantan Selatan", "Kalimantan Tengah", "Kalimantan Timur", "Kalimantan Utara"], answer: 0 },
+            { question: "Alat musik petik 'Sampe' khas suku Dayak berasal dari provinsi...", options: ["Kalimantan Timur", "Kalimantan Barat", "Kalimantan Selatan", "Kalimantan Tengah"], answer: 0 },
+            { question: "Pakaian adat 'Ta'a' dan makanan 'Katu' khas dari provinsi termuda Kalimantan yaitu...", options: ["Kalimantan Utara", "Kalimantan Timur", "Kalimantan Selatan", "Kalimantan Barat"], answer: 0 },
+            { question: "Pakaian adat 'Baju Bodo' dan tari 'Kipas Pakarena' berasal dari suku Bugis di provinsi...", options: ["Sulawesi Selatan", "Sulawesi Utara", "Sulawesi Tengah", "Gorontalo"], answer: 0 },
+            { question: "Alat musik 'Kolintang' dan tari 'Maengket' berasal dari provinsi...", options: ["Sulawesi Utara", "Sulawesi Selatan", "Sulawesi Tengah", "Gorontalo"], answer: 0 },
+            { question: "Pakaian adat 'Njemba' dan tari 'Pule Cinde' berasal dari provinsi...", options: ["Sulawesi Tengah", "Sulawesi Selatan", "Sulawesi Tenggara", "Sulawesi Barat"], answer: 0 },
+            { question: "Tari 'Lulo' dan makanan khas 'Sinonggi' berasal dari provinsi...", options: ["Sulawesi Tenggara", "Sulawesi Selatan", "Sulawesi Tengah", "Sulawesi Utara"], answer: 0 },
+            { question: "Kain tenun 'Sekkomandi' dan baju adat 'Pattuqduq Towaine' khas dari...", options: ["Sulawesi Barat", "Sulawesi Selatan", "Sulawesi Tengah", "Gorontalo"], answer: 0 },
+            { question: "Tari 'Dana-Dana' dan pakaian adat 'Makuta' khas dari provinsi...", options: ["Gorontalo", "Sulawesi Utara", "Sulawesi Tengah", "Sulawesi Selatan"], answer: 0 },
+            { question: "Alat musik 'Tifa' dan tari 'Lenso' khas daerah kepulauan...", options: ["Maluku", "Papua", "NTT", "Bali"], answer: 0 },
+            { question: "Pakaian adat 'Cele' dan kuliner 'Ikan Kuah Kuning' khas dari provinsi...", options: ["Maluku Utara", "Maluku", "Papua", "Papua Barat"], answer: 0 },
+            { question: "Pakaian adat 'Koteka' / 'Holi' dan tari 'Musyoh' berasal dari provinsi...", options: ["Papua", "Maluku", "Papua Barat", "NTT"], answer: 0 },
+            { question: "Makanan pokok khas 'Papeda' yang terbuat dari olahan sagu populer di...", options: ["Papua Barat", "Jawa Barat", "Kalimantan Barat", "Sumatera Barat"], answer: 0 },
+            { question: "Tari 'Suri Ikun' dan ukiran khas suku Asmat berasal dari provinsi...", options: ["Papua Selatan", "Papua Pegunungan", "Papua Tengah", "Papua Barat Daya"], answer: 0 },
+            { question: "Tradisi bakar batu dan pakaian adat serat kayu khas dari wilayah...", options: ["Papua Pegunungan", "Papua Barat", "Papua Selatan", "Papua Tengah"], answer: 0 },
+            { question: "Kesenian tari 'Tifa Cenderawasih' berasal dari daerah provinsi...", options: ["Papua Tengah", "Papua Selatan", "Papua Barat", "Papua Pegunungan"], answer: 0 },
+            { question: "Wilayah pesisir Sorong dan tari 'Selamat Datang Papua' khas dari provinsi...", options: ["Papua Barat Daya", "Papua Barat", "Papua", "Papua Selatan"], answer: 0 }
         ];
 
+        let currentQuizData = [];
         let currentQuestionIndex = 0;
         let score = 0;
         let lockAnswer = false;
@@ -181,8 +206,31 @@
         const progressText = document.getElementById("progress");
         const nextBtn = document.getElementById("next-btn");
 
+        // Fungsi mengacak array (Fisher-Yates Shuffle)
+        function shuffleArray(array) {
+            let shuffled = JSON.parse(JSON.stringify(array));
+            for (let i = shuffled.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+            }
+            return shuffled;
+        }
+
         function startGame() {
+            // Acak urutan pertanyaan dan pilihan jawaban setiap kali game dimulai
+            currentQuizData = shuffleArray(rawQuizData).map(item => {
+                const correctAnswerText = item.options[item.answer];
+                const shuffledOptions = shuffleArray(item.options);
+                const newAnswerIndex = shuffledOptions.indexOf(correctAnswerText);
+                return {
+                    question: item.question,
+                    options: shuffledOptions,
+                    answer: newAnswerIndex
+                };
+            });
+
             homeScreen.classList.add("hidden");
+            endScreen.classList.add("hidden");
             gameScreen.classList.remove("hidden");
             currentQuestionIndex = 0;
             score = 0;
@@ -193,8 +241,8 @@
         function loadQuestion() {
             lockAnswer = false;
             nextBtn.classList.add("hidden");
-            const currentData = quizData[currentQuestionIndex];
-            progressText.textContent = `Pertanyaan ${currentQuestionIndex + 1} dari ${quizData.length}`;
+            const currentData = currentQuizData[currentQuestionIndex];
+            progressText.textContent = `Pertanyaan ${currentQuestionIndex + 1} dari ${currentQuizData.length}`;
             questionText.textContent = currentData.question;
 
             for (let i = 0; i < 4; i++) {
@@ -208,7 +256,7 @@
             if (lockAnswer) return;
             lockAnswer = true;
 
-            const currentData = quizData[currentQuestionIndex];
+            const currentData = currentQuizData[currentQuestionIndex];
             const correctIndex = currentData.answer;
 
             for (let i = 0; i < 4; i++) {
@@ -221,11 +269,11 @@
             }
 
             if (selectedIndex === correctIndex) {
-                score += 20;
+                score += 10;
                 scoreSpan.textContent = score;
             }
 
-            if (currentQuestionIndex < quizData.length - 1) {
+            if (currentQuestionIndex < currentQuizData.length - 1) {
                 nextBtn.classList.remove("hidden");
             } else {
                 setTimeout(() => {
@@ -240,11 +288,7 @@
             currentQuestionIndex++;
             loadQuestion();
         }
-
-        function resetGame() {
-            endScreen.classList.add("hidden");
-            homeScreen.classList.remove("hidden");
-        }
     </script>
 </body>
-</html>
+                </html>
+                
