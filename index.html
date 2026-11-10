@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Misi Jelajah Nusantara - Galeri Budaya</title>
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --accent: #e67e22;
+            --bg: #f9f9f9;
+            --card-bg: #ffffff;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            width: 100%;
+            max-width: 600px;
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        h1 {
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+        .subtitle {
+            color: #7f8c8d;
+            font-size: 14px;
+            margin-bottom: 25px;
+        }
+        .question-box {
+            background: #f1f2f6;
+            padding: 20px;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: bold;
+            color: #2f3640;
+            margin-bottom: 20px;
+        }
+        .options-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+        .btn-option {
+            background: white;
+            border: 2px solid #dcdde1;
+            padding: 15px;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .btn-option:hover {
+            background: #f5f6fa;
+            border-color: var(--accent);
+        }
+        .btn-option.correct {
+            background: #2ecc71 !important;
+            color: white;
+            border-color: #27ae60;
+        }
+        .btn-option.wrong {
+            background: #e74c3c !important;
+            color: white;
+            border-color: #c0392b;
+        }
+        .score-board {
+            font-size: 16px;
+            font-weight: bold;
+            color: var(--primary);
+            margin-top: 15px;
+        }
+        .btn-start, .btn-next {
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .btn-start:hover, .btn-next:hover {
+            background: #d35400;
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- Halaman Utama / Menu -->
+        <div id="home-screen">
+            <h1>🌏 Misi Jelajah Nusantara</h1>
+            <p class="subtitle">Kenal Budaya, Cinta Nusantara[span_0](start_span)[span_0](end_span)</p>
+            <p style="margin-bottom: 30px; color: #555;">Uji pengetahuanmu seputar pakaian adat, makanan, tarian, dan alat musik dari berbagai daerah di Indonesia!</p>
+            <button class="btn-start" onclick="startGame()">Mulai Misi Sekarang</button>
+        </div>
+
+        <!-- Halaman Game / Kuis -->
+        <div id="game-screen" class="hidden">
+            <div id="progress" style="font-size: 13px; color: #7f8c8d; margin-bottom: 10px;">Pertanyaan 1 dari 5</div>
+            <div class="question-box" id="question-text">Memuat pertanyaan...</div>
+            
+            <div class="options-grid">
+                <button class="btn-option" onclick="checkAnswer(0)" id="opt-0">Pilihan 1</button>
+                <button class="btn-option" onclick="checkAnswer(1)" id="opt-1">Pilihan 2</button>
+                <button class="btn-option" onclick="checkAnswer(2)" id="opt-2">Pilihan 3</button>
+                <button class="btn-option" onclick="checkAnswer(3)" id="opt-3">Pilihan 4</button>
+            </div>
+
+            <button class="btn-next hidden" id="next-btn" onclick="nextQuestion()">Pertanyaan Selanjutnya</button>
+            <div class="score-board">Skor: <span id="score">0</span></div>
+        </div>
+
+        <!-- Halaman Selesai -->
+        <div id="end-screen" class="hidden">
+            <h2>🎉 Misi Selesai!</h2>
+            <p style="margin: 20px 0; font-size: 18px;">Skor Akhir Kamu: <strong id="final-score" style="color: var(--accent);">0</strong></p>
+            <p style="color: #666; font-size: 14px; margin-bottom: 25px;">Terima kasih sudah ikut melestarikan dan mengenal budaya Indonesia melalui teknologi!</p>
+            <button class="btn-start" onclick="resetGame()">Main Lagi</button>
+        </div>
+    </div>
+
+    <script>
+        const quizData = [
+            {
+                question: "Dari provinsi manakah asal alat musik tradisional 'Sasando' yang terbuat dari daun lontar?",
+                options: ["Bali", "Nusa Tenggara Timur (NTT)", "Maluku", "Papua"],
+                answer: 1
+            },
+            {
+                question: "Makanan khas tradisional 'Rendang' berasal dari daerah...",
+                options: ["Sumatera Barat", "Jawa Tengah", "Sulawesi Selatan", "Sumatera Utara"],
+                answer: 0
+            },
+            {
+                question: "Tari Tradisional 'Saman' yang terkenal dengan gerakan cepat dan serentak berasal dari...",
+                options: ["Aceh", "Riau", "Kalimantan Timur", "Jawa Barat"],
+                answer: 0
+            },
+            {
+                question: "Pakaian adat 'Ulos' merupakan identitas kebudayaan tradisional dari provinsi...",
+                options: ["Sumatera Utara", "Jambi", "Bengkulu", "Lampung"],
+                answer: 0
+            },
+            {
+                question: "Alat musik tradisional 'Angklung' yang terbuat dari bambu berasal dari...",
+                options: ["DKI Jakarta", "Jawa Barat", "DI Yogyakarta", "Jawa Timur"],
+                answer: 1
+            }
+        ];
+
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let lockAnswer = false;
+
+        const homeScreen = document.getElementById("home-screen");
+        const gameScreen = document.getElementById("game-screen");
+        const endScreen = document.getElementById("end-screen");
+        const questionText = document.getElementById("question-text");
+        const scoreSpan = document.getElementById("score");
+        const finalScoreSpan = document.getElementById("final-score");
+        const progressText = document.getElementById("progress");
+        const nextBtn = document.getElementById("next-btn");
+
+        function startGame() {
+            homeScreen.classList.add("hidden");
+            gameScreen.classList.remove("hidden");
+            currentQuestionIndex = 0;
+            score = 0;
+            scoreSpan.textContent = score;
+            loadQuestion();
+        }
+
+        function loadQuestion() {
+            lockAnswer = false;
+            nextBtn.classList.add("hidden");
+            const currentData = quizData[currentQuestionIndex];
+            progressText.textContent = `Pertanyaan ${currentQuestionIndex + 1} dari ${quizData.length}`;
+            questionText.textContent = currentData.question;
+
+            for (let i = 0; i < 4; i++) {
+                const btn = document.getElementById(`opt-${i}`);
+                btn.textContent = currentData.options[i];
+                btn.className = "btn-option";
+            }
+        }
+
+        function checkAnswer(selectedIndex) {
+            if (lockAnswer) return;
+            lockAnswer = true;
+
+            const currentData = quizData[currentQuestionIndex];
+            const correctIndex = currentData.answer;
+
+            for (let i = 0; i < 4; i++) {
+                const btn = document.getElementById(`opt-${i}`);
+                if (i === correctIndex) {
+                    btn.classList.add("correct");
+                } else if (i === selectedIndex) {
+                    btn.classList.add("wrong");
+                }
+            }
+
+            if (selectedIndex === correctIndex) {
+                score += 20;
+                scoreSpan.textContent = score;
+            }
+
+            if (currentQuestionIndex < quizData.length - 1) {
+                nextBtn.classList.remove("hidden");
+            } else {
+                setTimeout(() => {
+                    gameScreen.classList.add("hidden");
+                    endScreen.classList.remove("hidden");
+                    finalScoreSpan.textContent = score;
+                }, 1200);
+            }
+        }
+
+        function nextQuestion() {
+            currentQuestionIndex++;
+            loadQuestion();
+        }
+
+        function resetGame() {
+            endScreen.classList.add("hidden");
+            homeScreen.classList.remove("hidden");
+        }
+    </script>
+</body>
+</html>
